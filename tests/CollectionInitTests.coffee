@@ -42,3 +42,33 @@ describe "CollectionInit", ->
       expect(spies["Meteor.publish"].args[0][0]).to.equals(collectionName)
 
 
+  it "Calls custom sub and pub if not autopublish", ->
+
+    opts = {
+      sub: stubs.create("sub")
+      pub: stubs.create("pub")
+    }
+
+    CollectionInit.init(collection, opts)
+    if Meteor.isClient
+      expect(stubs.sub).to.have.been.called
+
+    if Meteor.isServer
+      expect(stubs.pub).to.have.been.called
+
+  it "Don't calls custom sub and pub if not autopublish", ->
+
+    opts = {
+      autopublish: true
+      sub: stubs.create("sub")
+      pub: stubs.create("pub")
+    }
+
+    CollectionInit.init(collection, opts)
+
+    if Meteor.isClient
+      expect(stubs.sub).not.to.have.been.called
+
+    if Meteor.isServer
+      expect(stubs.pub).not.to.have.been.called
+
