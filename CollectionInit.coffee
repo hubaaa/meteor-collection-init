@@ -1,5 +1,5 @@
 log = new ObjectLogger("practical.CollectionInit", "debug")
-
+practical = @practical
 
 class @CollectionInit
 
@@ -11,6 +11,8 @@ class @CollectionInit
       expect(opts, "opts").to.be.an("object")
 
       collection.practical = {}
+
+      @_createSchema(collection, opts)
 
       if opts.autopublish
         @_autoPublishCollection(collection)
@@ -25,6 +27,27 @@ class @CollectionInit
 
       if opts.indexes? and  Meteor.isServer
         @_ensureIndexes(collection, opts)
+
+
+
+    finally
+      log.return()
+
+
+  @_createSchema: (collection, opts)=>
+    try
+      log.enter("_createSchema", opts)
+      expect(collection).to.be.instanceOf(Mongo.Collection)
+      expect(collection.practical).to.be.an("object")
+
+      schemaRules = practical.BaseSchemaRules()
+
+      if opts.schemaRules?
+        return false
+
+      collection.practical.schemaRules = schemaRules
+      collection.practical.schema = new SimpleSchema(schemaRules)
+      collection.attachSchema(collection.practical.schema)
 
 
     finally

@@ -108,3 +108,19 @@ describe "CollectionInit", ->
 
     if Meteor.isClient
       expect(stubs["collection.ensureIndex"]).not.to.have.been.called
+
+
+  it "Attach base schema to collection", ->
+
+    opts = {
+    }
+
+    CollectionInit.init(collection, opts)
+
+    expect(collection.practical.schema).to.be.instanceOf(SimpleSchema)
+    expect(_.keys(collection.practical.schemaRules)).to.eql(_.keys(practical.BaseSchemaRules()))
+
+    # I'm using a private property to determinate the keys of the schema of the collection,
+    # this can change and made the tests to fail in next releases of the package
+    expect(_.keys(collection.practical.schemaRules)).to.eql(collection.practical.schema._schemaKeys)
+
