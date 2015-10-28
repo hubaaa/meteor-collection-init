@@ -72,3 +72,14 @@ describe "CollectionInit", ->
     if Meteor.isServer
       expect(stubs.pub).not.to.have.been.called
 
+  it "Calls populate function", ->
+
+    opts = {
+      populate: stubs.create("populate")
+    }
+    CollectionInit.init(collection, opts)
+
+    if Meteor.isServer
+      expect(stubs.populate).to.have.been.called
+    if Meteor.isClient
+      expect(stubs.populate).not.to.have.been.called

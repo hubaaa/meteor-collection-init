@@ -19,6 +19,11 @@ class @CollectionInit
       if opts.sub and opts.pub and not opts.autopublish
         _customSubAndPub(collection, opts)
 
+      if opts.populate? and Meteor.isServer
+        expect(opts.populate, "populate").to.be.a("function")
+        opts.populate()
+
+
 
     finally
       log.return()
