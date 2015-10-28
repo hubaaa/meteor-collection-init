@@ -4,7 +4,7 @@ log = new ObjectLogger("practical.CollectionInit", "debug")
 class @CollectionInit
 
 
-  @init: (collection, opts = {})->
+  @init: (collection, opts = {})=>
     try
       log.enter("init", opts)
       expect(collection, "collection is not a Mongo Collection").to.be.instanceOf(Mongo.Collection)
@@ -13,25 +13,25 @@ class @CollectionInit
       collection.practical = {}
 
       if opts.autopublish
-        _autoPublishCollection(collection)
+        @_autoPublishCollection(collection)
 
       # Custom publish and subscription handlers
       if opts.sub and opts.pub and not opts.autopublish
-        _customSubAndPub(collection, opts)
+        @_customSubAndPub(collection, opts)
 
       if opts.populate? and Meteor.isServer
         expect(opts.populate, "populate").to.be.a("function")
         opts.populate()
 
       if opts.indexes? and  Meteor.isServer
-        _ensureIndexes(collection, opts)
+        @_ensureIndexes(collection, opts)
 
 
     finally
       log.return()
 
 
-  _autoPublishCollection = (collection)->
+  @_autoPublishCollection: (collection)->
     try
       log.enter("_autoPublishCollection")
       expect(collection).to.be.instanceOf(Mongo.Collection)
@@ -52,7 +52,7 @@ class @CollectionInit
       log.return()
 
 
-  _customSubAndPub = (collection, opts)=>
+  @_customSubAndPub: (collection, opts)=>
     try
       log.enter("_customSubAndPub", opts)
 
@@ -68,7 +68,7 @@ class @CollectionInit
       log.return()
 
 
-  _ensureIndexes = (collection, opts)=>
+  @_ensureIndexes: (collection, opts)=>
     try
       log.enter("_ensureIndexes", opts)
       expect(Meteor.isServer).to.be.true
