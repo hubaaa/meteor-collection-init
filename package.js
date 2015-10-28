@@ -12,6 +12,7 @@ Package.onUse(function(api){
   // Meteor packages
   api.use("coffeescript");
   api.use("mongo");
+  api.use("underscore");
 
   // Practical Meteor packages
   api.use("practicalmeteor:core");

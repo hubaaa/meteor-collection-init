@@ -124,3 +124,25 @@ describe "CollectionInit", ->
     # this can change and made the tests to fail in next releases of the package
     expect(_.keys(collection.practical.schemaRules)).to.eql(collection.practical.schema._schemaKeys)
 
+
+  it "Attach base schema and other schema to the collection", ->
+
+    opts = {
+      schemaRules: {
+        name:
+          type: String
+      }
+    }
+    expectKeys = _.keys(practical.BaseSchemaRules()).concat(_.keys(opts.schemaRules))
+
+
+    CollectionInit.init(collection, opts)
+
+
+    expect(collection.practical.schema).to.be.instanceOf(SimpleSchema)
+    expect(_.keys(collection.practical.schemaRules)).to.eql(expectKeys)
+
+    # I'm using a private property to determinate the keys of the schema of the collection,
+    # this can change and made the tests to fail in next releases of the package
+    expect(_.keys(collection.practical.schemaRules)).to.eql(collection.practical.schema._schemaKeys)
+

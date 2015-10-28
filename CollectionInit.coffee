@@ -43,7 +43,8 @@ class @CollectionInit
       schemaRules = practical.BaseSchemaRules()
 
       if opts.schemaRules?
-        return false
+        expect(opts.schemaRules).to.be.an("object")
+        schemaRules = _.extend(schemaRules, opts.schemaRules)
 
       collection.practical.schemaRules = schemaRules
       collection.practical.schema = new SimpleSchema(schemaRules)
