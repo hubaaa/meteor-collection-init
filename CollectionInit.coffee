@@ -6,7 +6,7 @@ class @CollectionInit
 
   @init: (collection, opts = {})->
     try
-      log.enter("init", op)
+      log.enter("init", opts)
       expect(collection, "collection is not a Mongo Collection").to.be.instanceOf(Mongo.Collection)
       expect(opts, "opts").to.be.an("object")
 
@@ -23,6 +23,8 @@ class @CollectionInit
         expect(opts.populate, "populate").to.be.a("function")
         opts.populate()
 
+      if opts.indexes? and  Meteor.isServer
+        _ensureIndexes(collection, opts)
 
 
     finally
@@ -62,5 +64,19 @@ class @CollectionInit
         expect(opts.sub, "custom subscription").to.be.a("function")
         opts.sub()
 
+    finally
+      log.return()
+
+
+  _ensureIndexes = (collection, opts)=>
+    try
+      log.enter("_ensureIndexes", opts)
+      expect(Meteor.isServer).to.be.true
+      expect(opts.indexes).to.be.an("array")
+
+      for index in opts.indexes
+        expect(index.keys).to.be.an("object")
+        expect(index.options).to.be.an("object")
+        collection._ensureIndex(index.keys, index.options)
     finally
       log.return()

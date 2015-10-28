@@ -83,3 +83,28 @@ describe "CollectionInit", ->
       expect(stubs.populate).to.have.been.called
     if Meteor.isClient
       expect(stubs.populate).not.to.have.been.called
+
+  it "create indexes for the collection", ->
+
+    opts = {
+      indexes:[
+        {
+          keys: {name: 1}
+          options: {unique: true}
+        },
+        {
+          keys: {title: 1}
+          options: {}
+        }
+      ]
+    }
+
+    CollectionInit.init(collection, opts)
+
+    if Meteor.isServer
+      expect(stubs["collection.ensureIndex"]).to.have.been.callCount(opts.indexes.length)
+      for index in opts.indexes
+        expect(stubs["collection.ensureIndex"]).to.have.been.calledWith(index.keys, index.options)
+
+    if Meteor.isClient
+      expect(stubs["collection.ensureIndex"]).not.to.have.been.called
