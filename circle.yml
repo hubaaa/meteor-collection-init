@@ -9,4 +9,4 @@ machine:
 
 test:
   override:
-    - ./bin/test
+    - ./bin/ci-test
