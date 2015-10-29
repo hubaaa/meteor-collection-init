@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+spacejam test-packages --driver-package practicalmeteor:mocha-console-reporter ./
